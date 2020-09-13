@@ -1,30 +1,44 @@
-import math
-from string import ascii_lowercase
-from collections import Counter
-def valid(str1):
-    if str1[0] in ascii_lowercase and str1[1] in ascii_lowercase:
-        return True
-    else:
+def canGo(maze,x,y,d):
+    if d[0]==-1 and x==0:
         return False
-def solution(str1, str2):
-    counter,second=Counter(),Counter()
-    union,intersect=0,0
-    for i in range(0,len(str1)-1):
-        if valid(str1[i:i+2].lower()):
-            counter[str1[i:i+2].lower()]+=1
-    for j in range(0,len(str2)-1):
-        if valid(str2[j:j+2].lower()):
-            second[str2[j:j+2].lower()]+=1
-    for k,v in counter.items():
-        if second[k]==0:
-            union+=1
-        else:
-            union+=max(v,second[k])
-            intersect+=min(v,second[k])
-    for k,v in second.items():
-        if counter[k]==0:
-            union+=1
-    return int(math.floor(intersect/union*65536))
+    elif d[0]==1 and x==len(maze)-1:
+        return False
+    elif d[1]==-1 and y==0:
+        return False
+    elif d[1]==1 and y==len(maze)-1:
+        return False
+    else:
+        if maze[x+d[0]][y+d[1]]==1:
+            return False
+        return True
+    
+def solution(maze):
+    #위 오른쪽 아래 왼쪽
+    direction=[(-1,0),(0,1),(1,0),(0,-1)]
+    cur=1
+    x,y=0,0
+    time=0
+    N=len(maze)-1
+    while x!=N and y!=N:
+        if canGo(maze,x,y,direction[cur]):
+            x=x+direction[cur][0]
+            y=y+direction[cur][1]
+        elif canGo(maze,x,y,direction[(cur+1)%4]):
+            x=x+direction[(cur+1)%4][0]
+            y=y+direction[(cur+1)%4][1]
+            cur=(cur+1)%4
+        elif canGo(maze,x,y,direction[(cur+1)%4]):
+            x=x+direction[(cur+1)%4][0]
+            y=y+direction[(cur+1)%4][1]
+            cur=(cur+1)%4
+        elif canGo(maze,x,y,direction[(cur+1)%4]):
+            x=x+direction[(cur+1)%4][0]
+            y=y+direction[(cur+1)%4][1]
+            cur=(cur+1)%4
+        time+=1
+    return time
 if __name__ == '__main__':
-	print(solution("aabba","AAAA12"))
+    maze=[[0, 1, 0, 1], [0, 1, 0, 0], [0, 0, 0, 0], [1, 0, 1, 0]]
+    print(solution(maze))
+    #print(solution(info, query))
 	

@@ -37,6 +37,5 @@ for i in range(len(board)):
         if board[i][j]==0:
             coords.append((i,j))
 board = dfs(0)
-print('-------------')
 for i in range(len(board)):
     print(' '.join(map(str,board[i])))
