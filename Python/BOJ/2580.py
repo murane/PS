@@ -12,7 +12,9 @@ def possibleNum(board,x,y):
     for j in range((x//3)*3,(x//3)*3+3):
         for i in range((y//3)*3,(y//3)*3+3):
             tmp.add(board[j][i])
-    return list(candidate-tmp)
+    res=list(candidate-tmp)
+    res.sort()
+    return res
 def dfs(cnt):
     if cnt==len(coords):
         return board
@@ -30,7 +32,8 @@ def dfs(cnt):
             board[x][y]=0
 
 r=sys.stdin.readline
-board=[list(map(int,r().split())) for _ in range(9)]
+#board=[list(map(int,r().split())) for _ in range(9)]
+board=[list(map(int,r().strip())) for _ in range(9)]
 coords=[]
 for i in range(len(board)):
     for j in range(len(board[0])):
@@ -38,4 +41,4 @@ for i in range(len(board)):
             coords.append((i,j))
 board = dfs(0)
 for i in range(len(board)):
-    print(' '.join(map(str,board[i])))
+    print(''.join(map(str,board[i])))

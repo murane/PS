@@ -1,44 +1,36 @@
-def canGo(maze,x,y,d):
-    if d[0]==-1 and x==0:
-        return False
-    elif d[0]==1 and x==len(maze)-1:
-        return False
-    elif d[1]==-1 and y==0:
-        return False
-    elif d[1]==1 and y==len(maze)-1:
-        return False
+def divCon(arr,leng):
+    zero,one=0,0
+    #leng이 1이면 사각형의 0,1의 갯수와 arr을 반환
+    if leng==2:
+        for i in range(len(arr)):
+            for j in range(len(arr[0])):
+                if arr[i][j]==0: zero+=1
+                else: one+=1
     else:
-        if maze[x+d[0]][y+d[1]]==1:
-            return False
-        return True
-    
-def solution(maze):
-    #위 오른쪽 아래 왼쪽
-    direction=[(-1,0),(0,1),(1,0),(0,-1)]
-    cur=1
-    x,y=0,0
-    time=0
-    N=len(maze)-1
-    while x!=N and y!=N:
-        if canGo(maze,x,y,direction[cur]):
-            x=x+direction[cur][0]
-            y=y+direction[cur][1]
-        elif canGo(maze,x,y,direction[(cur+1)%4]):
-            x=x+direction[(cur+1)%4][0]
-            y=y+direction[(cur+1)%4][1]
-            cur=(cur+1)%4
-        elif canGo(maze,x,y,direction[(cur+1)%4]):
-            x=x+direction[(cur+1)%4][0]
-            y=y+direction[(cur+1)%4][1]
-            cur=(cur+1)%4
-        elif canGo(maze,x,y,direction[(cur+1)%4]):
-            x=x+direction[(cur+1)%4][0]
-            y=y+direction[(cur+1)%4][1]
-            cur=(cur+1)%4
-        time+=1
-    return time
+        for x,y in [(0,0),(leng//2,0),(0,leng//2),(leng//2,leng//2)]:
+            tmp_0,tmp_1=0,0
+            tmpArr=[]
+            for j in range(x,x+leng//2):
+                tmpRow=[]
+                for k in range(y,y+leng//2):
+                    tmpRow.append(arr[j][k])
+                    if arr[j][k]==0: tmp_0+=1
+                    else: tmp_1+=1
+                tmpArr.append(tmpRow)
+            if tmp_0==0: one+=1
+            elif tmp_1==0: zero+=1
+            else:
+                res=divCon(tmpArr,leng//2)
+                zero+=res[1]
+                one+=res[2]
+    return arr,zero,one
+
+def solution(arr):
+    L=len(arr)
+    _,zero,one = divCon(arr,L)
+    return [zero,one]
 if __name__ == '__main__':
-    maze=[[0, 1, 0, 1], [0, 1, 0, 0], [0, 0, 0, 0], [1, 0, 1, 0]]
-    print(solution(maze))
+    arr = [[1,1,0,0],[1,0,0,0],[1,0,0,1],[1,1,1,1]]
+    print(solution(arr))
     #print(solution(info, query))
 	
