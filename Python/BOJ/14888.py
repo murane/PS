@@ -1,43 +1,28 @@
 import sys
 from itertools import permutations
 r = sys.stdin.readline
-MAX=1000000000
-MIN=-1000000000
 N=int(r())
-numbers = list(map(int,r().split()))
-operands = list(map(int,r().split()))
-ops=[]
-for i in range(len(operands)):
-    for j in range(operands[i]):
-        if i==0:
-            ops.append('+')
-        elif i==1:
-            ops.append('-')
-        elif i==2:
-            ops.append('*')
-        elif i==3:
-            ops.append('/')
-op_list = permutations(ops,len(ops))
+A=list(map(int,r().split()))
 res=[]
-for op_order in op_list:
-    temp=0
-    for i in range(len(numbers)):
-        if i==0:
-            tmp=numbers[i]
-        else:
-            if op_order[i-1]=='+':
-                temp=tmp+numbers[i]
-            elif op_order[i-1]=='-':
-                temp=tmp-numbers[i]
-            elif op_order[i-1]=='*':
-                temp=tmp*numbers[i]
-            elif op_order[i-1]=='/':
-                temp=int(tmp/numbers[i])
-            tmp=temp
-    if temp>MAX:
-        temp=MAX
-    elif temp<MIN:
-        temp=MIN
-    res.append(temp)
+op=""
+for i,v in enumerate(list(map(int,r().split()))):# + - * /
+    if i==0: op+='+'*v
+    elif i==1: op+='-'*v
+    elif i==2: op+='*'*v
+    else: op+='/'*v
+def calc(nums,ops):
+    start=nums[0]
+    for i in range(len(ops)):
+        if ops[i]=='+':
+            start+=nums[i+1]
+        elif ops[i]=='-':
+            start-=nums[i+1]
+        elif ops[i]=='*':
+            start*=nums[i+1]
+        elif ops[i]=='/':
+            start=int(start/nums[i+1])
+    return start
+for operators in list(set(permutations(op,len(op)))):
+    res.append(calc(A,operators))
 print(max(res))
 print(min(res))

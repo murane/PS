@@ -3,24 +3,27 @@ r=sys.stdin.readline
 n=int(r())
 m=int(r())
 INF=sys.maxsize
-cost=[[INF]*(n+1) for _ in range(n+1)]
-vertex=[[-1]*(n+1) for _ in range(n+1)]
+cost=[[INF]*n for _ in range(n)]
 for _ in range(m):
     s,e,c=map(int,r().split())
-    cost[s][e]=c
-for i in range(1,n+1):
-    for j in range(1,n+1):
+    if cost[s-1][e-1]!=INF:
+        cost[s-1][e-1]=min(c,cost[s-1][e-1]) 
+    else:
+        cost[s-1][e-1]=c
+for i in range(n):
+    for j in range(n):
         if i==j:
             cost[i][j]=0
-        if cost[i][j]!=INF:
-            vertex[i][j]=i
 
-for mid in range(1,n):
-    for i in range(1,n):
-        for j in range(1,n):
+for mid in range(n):
+    for i in range(n):
+        for j in range(n):
             if cost[i][mid] + cost[mid][j] < cost[i][j]:
                 cost[i][j]=cost[i][mid] + cost[mid][j]
-for i in range(1,n+1):
-    for j in range(1,n+1):
-        print(cost[i][j],end=" ")
+for i in range(n):
+    for j in range(n):
+        if cost[i][j]==INF:
+            print(0,end=" ")
+        else:
+            print(cost[i][j],end=" ")
     print("")
