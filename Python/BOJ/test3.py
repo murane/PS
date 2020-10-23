@@ -1,46 +1,39 @@
-from collections import deque
 import sys
+from collections import deque
 input = sys.stdin.readline
-
-def bfs(x, y):
-    sumv = 0
-    visited = set()
-    q = deque()
-    q.append((x, y))
-    while q:
-        node = q.popleft()
-        if check[node[0]][node[1]] == 0: continue
-        visited.add((node[0], node[1]))
-        check[node[0]][node[1]] = 0
-        sumv = sumv + city[node[0]][node[1]]
-
-        for i in range(4):
-            nx, ny = node[0] + dx[i], node[1] + dy[i]
-            if not (0 <= nx < N and 0 <= ny < N): continue
-            if check[nx][ny] == 0: continue
-            if not (L <= abs(city[node[0]][node[1]] - city[nx][ny]) <= R): continue
-            q.append((nx, ny))
-    return visited, sumv // len(visited)
-
-
-if __name__ == '__main__':
-    N, L, R = map(int, input().split())
-    city = [list(map(int, input().split())) for _ in range(N)]
-    cnt = 0
-    dx = (0, 1, 0, -1)
-    dy = (1, 0, -1, 0)
-    while True:
-        flag = 0
-        check = [[-1]*N for _ in range(N)]
-        for x in range(N):
-            for y in range(N):
-                if check[x][y] == 0: continue
-                array, change = bfs(x, y)
-                if len(array) > 1:
-                    flag = 1
-                    for i, j in array:
-                        city[i][j] = change
-        if flag == 0: break
-        check.clear()
-        cnt = cnt + 1
-    print(cnt)
+n,m,s = map(int,input().split())
+arr = []
+for i in range(n):
+    a,b = map(int,input().split())
+    arr.append([a,b])
+# 첫번째 덱: Ai를 기준으로 정렬한 덱
+aa = deque(sorted(arr,key=lambda x: x[0],reverse=True))
+# 두번째 덱: Bi를 기준으로 정렬한 덱
+bb = deque(sorted(arr,key=lambda x: x[1],reverse=True))
+# Ai를 기준으로 한 합계
+temp1 = 0
+# m만큼 덱에서 temp1에 합함
+for i in range(m):
+    temp1+=aa[i][0]
+# 첫번째 덱: m만큼 덱에서 제거
+for i in range(m):
+    aa.popleft()
+# 첫번째 덱을 Bi를 기준으로 재정렬함
+aa = sorted(aa,key=lambda x: x[1],reverse=True)
+# s만큼 덱에서 temp1에 합함
+for i in range(s):
+    temp1+=aa[i][1]
+# Bi를 기준으로 한 합계
+temp2 = 0
+# s만큼 덱에서 temp2에 합함
+for i in range(s):
+    temp2+=bb[i][1]
+# 두번째 덱: s만큼 덱에서 제거
+for i in range(s):
+    bb.popleft()
+# 두번째 덱을 Ai를 기준으로 재정렬함
+bb = sorted(bb,key=lambda x: x[0],reverse=True)
+# m만큼 덱에서 temp2에 합함
+for i in range(m):
+    temp2+=bb[i][0]
+print(max(temp1,temp2))
