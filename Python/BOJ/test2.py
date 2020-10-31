@@ -1,36 +1,33 @@
-def divCon(arr,leng):
-    zero,one=0,0
-    #leng이 1이면 사각형의 0,1의 갯수와 arr을 반환
-    if leng==2:
-        for i in range(len(arr)):
-            for j in range(len(arr[0])):
-                if arr[i][j]==0: zero+=1
-                else: one+=1
-    else:
-        for x,y in [(0,0),(leng//2,0),(0,leng//2),(leng//2,leng//2)]:
-            tmp_0,tmp_1=0,0
-            tmpArr=[]
-            for j in range(x,x+leng//2):
-                tmpRow=[]
-                for k in range(y,y+leng//2):
-                    tmpRow.append(arr[j][k])
-                    if arr[j][k]==0: tmp_0+=1
-                    else: tmp_1+=1
-                tmpArr.append(tmpRow)
-            if tmp_0==0: one+=1
-            elif tmp_1==0: zero+=1
-            else:
-                res=divCon(tmpArr,leng//2)
-                zero+=res[1]
-                one+=res[2]
-    return arr,zero,one
+from collections import deque
+def dfs(x,y,v,visit):
+    d=[(1,0),(-1,0),(0,1),(0,-1)]
+    cur=v[x][y]
+    stack=[]
+    stack.append((x,y))
+    visit[x][y]=True
+    while stack:
+        x,y=stack.pop()
+        for i in range(4):
+            Nx,Ny=x+d[i][0],y+d[i][1]
+            if not 0<=Nx<len(v) or not 0<=Ny<len(v): continue
+            if v[Nx][Ny]!=cur or visit[Nx][Ny]: continue
+            stack.append((Nx,Ny))
+            visit[Nx][Ny]=True
+    return cur,visit
+def solution(v):
+    answer = [0,0,0]
+    visit=[[False]*len(v) for _ in range(len(v))]
+    for i in range(len(v)):
+        for j in range(len(v)):
+            if not visit[i][j]:
+                ans,after=dfs(i,j,v,visit)
+                answer[ans]+=1
+                visit=after
+    
+    return answer
 
-def solution(arr):
-    L=len(arr)
-    _,zero,one = divCon(arr,L)
-    return [zero,one]
 if __name__ == '__main__':
-    arr = [[1,1,0,0],[1,0,0,0],[1,0,0,1],[1,1,1,1]]
-    print(solution(arr))
+    v=[[0,0,1,1],[1,1,1,1],[2,2,2,1],[0,0,0,2]]
+    print(solution(v))
     #print(solution(info, query))
 	
