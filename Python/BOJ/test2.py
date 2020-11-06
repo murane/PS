@@ -1,33 +1,48 @@
-from collections import deque
-def dfs(x,y,v,visit):
-    d=[(1,0),(-1,0),(0,1),(0,-1)]
-    cur=v[x][y]
-    stack=[]
-    stack.append((x,y))
-    visit[x][y]=True
-    while stack:
-        x,y=stack.pop()
-        for i in range(4):
-            Nx,Ny=x+d[i][0],y+d[i][1]
-            if not 0<=Nx<len(v) or not 0<=Ny<len(v): continue
-            if v[Nx][Ny]!=cur or visit[Nx][Ny]: continue
-            stack.append((Nx,Ny))
-            visit[Nx][Ny]=True
-    return cur,visit
-def solution(v):
-    answer = [0,0,0]
-    visit=[[False]*len(v) for _ in range(len(v))]
-    for i in range(len(v)):
-        for j in range(len(v)):
-            if not visit[i][j]:
-                ans,after=dfs(i,j,v,visit)
-                answer[ans]+=1
-                visit=after
-    
-    return answer
+from collections import Counter
+def solution(a):
+    counter=Counter(a)
+    if len(a)==1:
+        return 0
+    elif len(a)==2:
+        return 1
+    else:
+        if counter.most_common()[1]==1:
+            return 2
+        ans=0
+        for num,cnt in counter.most_common():
+            cur=0
+            tmp=0
+            while True:
+                cur=getNext(a,num,cnt,cur,len(a))
+                if cur!=-1:tmp+=2
+                if cur==-1 or cur>=len(a)-1:
+                    ans=max(tmp,ans)
+                    break
+        return ans
+                
+def getNext(a,num,cnt,cur,limit):
+    if a[cur]==num:
+        cur+=1
+        if cur==len(a)-1:
+            return -1
+        while a[cur]==num:
+            if cur==len(a)-1:
+                return -1
+            cur+=1
+        return cur+1
+    else:
+        cur+=1
+        if cur==len(a)-1:
+            return -1
+        while a[cur]!=num:
+            if cur==len(a)-1:
+                return -1
+            cur+=1
+        return cur+1
+            
 
 if __name__ == '__main__':
-    v=[[0,0,1,1],[1,1,1,1],[2,2,2,1],[0,0,0,2]]
-    print(solution(v))
+    a=[0,3,3,0,7,2,0,2,2,0]
+    print(solution(a))
     #print(solution(info, query))
 	
