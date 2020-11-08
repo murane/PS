@@ -29,21 +29,44 @@ dist=sys.maxsize
 for i in range(N):
     for j in range(N):
         start=Map[i][j]
+<<<<<<< HEAD
         if start!=0:
             q=deque([(i,j,0)])
             while q:
                 x,y,curDist=q.popleft()
                 if curDist>dist or curDist>99:break
+=======
+        visit=[[False]*N for _ in range(N)]
+        visit[i][j]=True
+        if start!=0:
+            q=deque([(i,j,0)])
+            flg=False
+            while q:
+                x,y,curDist=q.popleft()
+                if curDist>=dist:break
+>>>>>>> 65f47ddc5ab3f8a6fd040aba753c1ca81245dc29
                 for k in range(4):
                     tmpDist=curDist
                     Nx,Ny=x+d[k][0],y+d[k][1]
                     if not 0<=Nx<N or not 0<=Ny<N: continue
+<<<<<<< HEAD
                     if Map[Nx][Ny]==start: continue
+=======
+                    if Map[Nx][Ny]==start or visit[Nx][Ny]: continue
+>>>>>>> 65f47ddc5ab3f8a6fd040aba753c1ca81245dc29
                     if Map[Nx][Ny]==0:
                         tmpDist+=1
                     elif Map[Nx][Ny]!=0:
                         dist=min(dist,tmpDist)
+<<<<<<< HEAD
                         break
                     q.append((Nx,Ny,tmpDist))
 
+=======
+                        flg=True
+                        break
+                    visit[Nx][Ny]=True
+                    q.append((Nx,Ny,tmpDist))
+                if flg: break
+>>>>>>> 65f47ddc5ab3f8a6fd040aba753c1ca81245dc29
 print(dist)
