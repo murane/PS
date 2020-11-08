@@ -1,23 +1,33 @@
-from collections import deque
-m,n=map(int,input().split())
-D=[input() for _ in range(n)]
-S=[[float('INF')]*m for _ in range(n)]
-dx,dy=[0,0,1,-1],[1,-1,0,0]
-C=[]
-for i in range(n):
-    for j in range(m):
-        if D[i][j]=='C':C.append((i,j))
-sx,sy=C[0][0],C[0][1]
-ex,ey=C[1][0],C[1][1]
-q=deque([(sx,sy)])
-S[sx][sy]=0
-while q:
-    x,y=q.popleft()
-    for i in range(4):
-        nx,ny=x+dx[i],y+dy[i]
-        while 1:
-            if 0<=nx<n and 0<=ny<m and D[nx][ny]!='*' and S[nx][ny]>=S[x][y]+1:
-                q.append((nx,ny));S[nx][ny]=S[x][y]+1
-            else:break
-            nx+=dx[i];ny+=dy[i]
-print(S[ex][ey]-1)
+import sys
+input = sys.stdin.readline
+
+def check():
+    dist = [inf]*(N+1)
+    dist[1] = 0
+    update = False
+    for n in range(N):
+        update = False
+        for s,e,t in adjL:
+            if dist[s] + t < dist[e]:
+                update = True
+                dist[e] = dist[s] + t
+        if not update: break
+    if update: return True
+    return False
+
+
+inf = 0xfffffff
+T = int(input())
+for t in range(T):
+    N,M,W = map(int,input().split())
+    adjL = []
+    for m in range(M):
+        S,E,T = map(int,input().split())
+        adjL.append([S,E,T])
+        adjL.append([E,S,T])
+    for w in range(W):
+        S,E,T = map(int,input().split())
+        adjL.append([S,E,-T])
+
+    if check(): print('YES')
+    else: print('NO')
