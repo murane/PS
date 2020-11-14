@@ -10,13 +10,16 @@ one=min(dice)
 ans+=(one*((N-2)**2 + 4*(N-2)*(N-1)))
 two=[
     dice[0]+dice[1],dice[0]+dice[3],dice[0]+dice[2],dice[0]+dice[4],
-    dice[5]+dice[1],dice[0]+dice[3],dice[0]+dice[2],dice[0]+dice[4],
+    dice[5]+dice[1],dice[5]+dice[3],dice[5]+dice[2],dice[5]+dice[4],
     dice[1]+dice[2],dice[2]+dice[4],dice[3]+dice[4],dice[1]+dice[3]
     ]
 ans+=(min(two)*(2*N-3)*4)
 three=[
-    dice[1]+dice[2]+dice[5],dice[2]+dice[4]+dice[5],dice[3]+dice[4]+dice[5],dice[1]+dice[3]+dice[5],
-    dice[1]+dice[2]+dice[0],dice[2]+dice[4]+dice[0],dice[3]+dice[4]+dice[0],dice[1]+dice[3]+dice[0]
+    dice[0]+dice[3]+dice[4],dice[0]+dice[1]+dice[3],dice[0]+dice[1]+dice[2],dice[0]+dice[2]+dice[4],
+    dice[3]+dice[4]+dice[5],dice[1]+dice[3]+dice[5],dice[1]+dice[2]+dice[5],dice[2]+dice[4]+dice[5]
 ]
 ans+=(min(three)*4)
-print(ans)
+if N==1:
+    print(sum(dice)-max(dice))
+else:
+    print(ans)
