@@ -15,6 +15,8 @@ bags.sort()
 ans=0
 i=0
 heap=[]
+#용량이 적은 가방부터 무게가 적은 들어갈수 있는 보석중
+#가장 가격이 높은 순으로 넣어준다
 for bag in bags:
     while i<N and gems[i][0]<=bag:
         heapq.heappush(heap,-gems[i][1])
