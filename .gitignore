@@ -1,3 +1,7 @@
 /.vscode
 /bash.exe.stackdump
+*/Include
+*/Lib
+*/Scripts
+*/pyvenv.cfg
 기출
