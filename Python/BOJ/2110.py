@@ -5,7 +5,7 @@ house=[]
 for _ in range(N):
     house.append(int(r()))
 house.sort()
-lo,hi=1,(house[-1]-house[0])//(C-1)+1
+lo,hi=1,(house[-1]-house[0])//(C-1)
 
 def canInstall(x):
     cnt=1
