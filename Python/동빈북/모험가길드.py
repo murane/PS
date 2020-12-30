@@ -3,7 +3,7 @@ from collections import Counter
 r=sys.stdin.buffer.readline
 N=int(r())
 horror=list(map(int,r().split()))
-horror.sort()
+horror.sort(reverse=True)
 ans=0
 while horror:
     cur=horror.pop()
