@@ -1,3 +1,5 @@
+#사장의 참석에 따라 재귀적으로 하위 사원의 참석여부가
+#결정나기 때문에 tree dp를 사용한다
 import sys
 r=sys.stdin.readline
 N=int(r())

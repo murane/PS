@@ -17,4 +17,4 @@ while r<n:
         m=nextRoom(m)
     ans=min(ans,max(m-l,r-m))
     l,r=nextRoom(l),nextRoom(r)
-print(ans)
+print(ans)-
