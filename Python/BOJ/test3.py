@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import datetime
 def replace_note(note):
     note=note.replace("C#","c")
@@ -38,3 +39,19 @@ if __name__ == '__main__':
     music_infos= ["03:00,03:30,FOO,CC#B", "04:00,04:08,BAR,CC#BCC#BCC#B"]
     solution(m,music_infos)
     
+=======
+import sys
+from collections import defaultdict
+r=sys.stdin.readline
+N,Q=map(int,r().split())
+query=[]
+g=defaultdict(list)
+for i in range(1,N+1):
+    a,b=map(int,r().split())
+    g[a].append(b)
+    g[b].append(a)
+for _ in range(Q):
+    u,v=map(int,r().split())
+    query.append([u,v])
+for u,v in query:
+>>>>>>> dacae1c1569dc4de981c69564ab60c50a80e62ff
