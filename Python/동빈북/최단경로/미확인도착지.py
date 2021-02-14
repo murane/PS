@@ -14,5 +14,7 @@ for _ in range(int(r())):
     for _ in range(t):
         candidate.append(int(r()))
     
-    
+    def dijkstra(start):
+        
+
 
