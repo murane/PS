@@ -2,20 +2,20 @@ import sys,heapq
 from collections import defaultdict
 r=sys.stdin.readline
 N,M=map(int,r().split())
-def find(X):
-    if house[X]==X:
+def find(lst,X):
+    if lst[X]==X:
         return X
-    house[X]=find(house[X])
-    return house[X]
-def union(X,Y):
-    X=find(X)
-    Y=find(Y)
+    lst[X]=find(lst,lst[X])
+    return lst[X]
+def union(lst,X,Y):
+    X=find(lst,X)
+    Y=find(lst,Y)
     if X==Y:
         return
     if X>Y:
-        house[X]=Y
+        lst[X]=Y
     else:
-        house[Y]=X
+        lst[Y]=X
 
 gil=[]
 house=[0]+list(range(1,N+1))
@@ -29,8 +29,8 @@ selected=[]
 while gil:
     tmp=heapq.heappop(gil)
     c,a,b=tmp[0],tmp[1],tmp[2]
-    if find(a)!=find(b):
-        union(a,b)
+    if find(house,a)!=find(house,b):
+        union(house,a,b)
         selected.append((c,a,b))
         tmpTree[a].append(b)
         tmpTree[b].append(a)
