@@ -1,59 +1,71 @@
+
 def timeToSec(time):
-    H=int(time[0:2])
-    M=int(time[3:5])
-    S=int(time[6:8])
-    return H*60*60+M*60+S
+    H,M,S=int(time[:2]),int(time[3:5]),int(time[6:])
+    return H*3600+M*60+S
 def secToTime(sec):
     H=sec//3600
-    M=(sec%3600)//60
-    S=(sec%3600)%60
-    return ':'.join(map(lambda x: str(x) if len(str(x))==2 else '0'+str(x),[H,M,S]))
+    sec-=H*3600
+    M=sec//60
+    sec-=M*60
+    return ':'.join(map(lambda x: str(x) if len(str(x))==2 else '0'+str(x),[H,M,sec]))
 def solution(play_time, adv_time, logs):
-    answer = ''
-    start_time,end_time=[],[]
-    for log in logs:
-        start,end=log.split("-")
-        start,end=timeToSec(start),timeToSec(end)
-        start_time.append(start)
-        end_time.append(end)
-    #시작시간과 종료시간을 초로 변환하여 큐에 삽입
-    start_time.sort()
-    end_time.sort()
-    end_time2=end_time[:]
-    #시간순으로 정렬
-    play_sec=timeToSec(play_time)
-    adv_sec=timeToSec(adv_time)
+    play_sec = timeToSec(play_time)
+    adv_sec = timeToSec(adv_time)
     
-    totalPlayingTime=0
-    sCur=0
-    eCur=0
-    ans=(0,0)
-    playingCnt=0
-    for sec in range(adv_sec):
-        while start_time[sCur]==sec:
-            playingCnt+=1
-            sCur+=1
-        while end_time[eCur]==sec:
-            playingCnt-=1
-            eCur+=1
-        totalPlayingTime+=playingCnt
-    ans=(0,totalPlayingTime)
-    #0초일때 삽입하면 얻는 총 재생시간 구하기
+    startlogs=[]
+    endlogs=[]
+    for log in logs:
+        startlogs.append(timeToSec(log[:8]))
+        endlogs.append(timeToSec(log[9:]))
+    
+    startlogs.sort()
+    endlogs.sort()
+
+    lsc=0
+    lec=0
+    rsc=0
+    rec=0
+    L=len(logs)
+    inc_cnt,dec_cnt=0,0
+    viewer_playing_time_tot=0
+    
+    while startlogs[lsc]==0:
+        lsc+=1
+    
+    for sec in range(0,adv_sec):
+        #지금까지의 시청자가 본 재생시간
+        viewer_playing_time_tot+=inc_cnt
+        #로그로 시청자수 조절
+        while rsc<L and startlogs[rsc]<=sec:
+            rsc+=1
+        while rec<L and endlogs[rec]<=sec:
+            rec+=1
+        inc_cnt=rsc-rec
+    
+    ans=(0,viewer_playing_time_tot)
+    view_cnt=0
     for sec in range(1,play_sec-adv_sec):
-        while sCur<len(start_time) and start_time[sCur]==sec+adv_time:
-            playingCnt+=1
-            sCur+=1
-        while eCur<len(end_time) and end_time[eCur]==sec+adv_time:
-            playingCnt-=1
-            eCur+=1
-        eCur2=0
-        while eCur2<len(end_time2) and end_time2[eCur2]==sec:
-            eCur2+=1
-        totalPlayingTime+=playingCnt
-        totalPlayingTime-=eCur2
-        if ans[1]<totalPlayingTime:
-            ans=(sec,totalPlayingTime)
-    return secToTime(ans[1])
+        l_sec=sec
+        r_sec=sec+adv_sec
+        
+        viewer_playing_time_tot+=view_cnt
+        
+        if ans[1]<viewer_playing_time_tot:
+            ans=(sec,viewer_playing_time_tot)
+        
+        while lsc<L and startlogs[lsc]<=l_sec:
+            lsc+=1
+        while lec<L and endlogs[lec]<=l_sec:
+            lec+=1
+        while rsc<L and startlogs[rsc]<=r_sec:
+            rsc+=1
+        while rec<L and endlogs[rec]<=r_sec:
+            rec+=1
+        inc_cnt=rsc-rec
+        dec_cnt=lsc-lec
+        view_cnt+=(inc_cnt-dec_cnt)
+    
+    return secToTime(ans[0])
 
 if __name__ == '__main__':
     play_time="02:03:55"
