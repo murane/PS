@@ -1,16 +1,21 @@
 import sys
+from collections import defaultdict
 r=sys.stdin.readline
-N,K=map(int,r().split())
-S=r().strip()
-def HappyCnt(S):
-    cnt=0
-    if len(S)==1:
-        return cnt
-    for i in range(1,len(S)):
-        if S[i-1]==S[i]:
-            cnt+=1
-    return cnt
-cnt=HappyCnt(S)
-#LR=list(S).count("LR")
-#RL=list(S).count("RL")
-print(min(N-1,cnt+2*K))
+N=int(r())
+A=list(map(int,r().split()))
+B=list(map(int,r().split()))
+C=list(map(int,r().split()))
+
+# i -> 1 ~ N
+Adict=defaultdict(int)
+Bdict=defaultdict(int)
+
+for i in range(N):
+    Adict[A[i]]+=1
+    Bdict[B[C[i]-1]]+=1
+ans=0
+for k in Adict.keys():
+    ans+=Adict[k]*Bdict[k]
+print(ans)
+
+
